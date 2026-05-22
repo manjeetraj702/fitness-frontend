@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:8080";
+const API_BASE_URL = "https://fitness-backend-b8r0.onrender.com";
 let macroChartInstance = null;
 
 // ============================================================
@@ -378,11 +378,9 @@ document.addEventListener("DOMContentLoaded", () => {
             };
 
             try {
-                // Get your saved authorization token from localStorage
-                const token = localStorage.getItem("token");
-
+                // Get your saved authorization token from localStor
                 // Execute network handshake directly to your Java Controller Gateway on Port 8080
-                const response = await fetch("http://localhost:8080/api/v1/analytics/predict", {
+                const response = await fetch("https://fitness-backend-b8r0.onrender.com/api/v1/analytics/predict", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",

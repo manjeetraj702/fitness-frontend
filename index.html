@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bulky Fitness | Discipline Today, Strength Tomorrow</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 <body class="bg-gray-950 text-gray-100 font-sans selection:bg-amber-500 selection:text-black">
 
@@ -13,6 +13,7 @@
             <span class="text-amber-500 text-2xl font-black tracking-tighter">🏋️ BULKY-</span>
             <span class="text-xs font-bold uppercase tracking-widest text-gray-400 mt-1.5 block">Fitness</span>
         </div>
+        
         <nav class="hidden md:flex items-center space-x-8 text-xs font-bold uppercase tracking-wider text-gray-400">
             <a href="#" class="text-amber-500 transition">Home</a>
             <a href="#" onclick="toggleAuthModal()" class="hover:text-white transition">Workouts</a>
@@ -21,13 +22,28 @@
             <a href="#" class="hover:text-white transition">About Us</a>
             <a href="#" class="hover:text-white transition">Contact</a>
         </nav>
-        <button onclick="toggleAuthModal()" class="bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs uppercase tracking-wider px-5 py-2.5 rounded-lg flex items-center space-x-1.5 transition duration-150 shadow-lg shadow-amber-500/10">
-            <span>Get Started</span> <span>→</span>
-        </button>
+
+        <div class="flex items-center space-x-3">
+            <button onclick="toggleAuthModal()" class="bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs uppercase tracking-wider px-5 py-2.5 rounded-lg flex items-center space-x-1.5 transition duration-150 shadow-lg shadow-amber-500/10 cursor-pointer">
+                <span>Get Started</span> <span>→</span>
+            </button>
+            
+            <button onclick="toggleMobileMenu()" class="md:hidden text-gray-400 hover:text-white focus:outline-none cursor-pointer text-xl p-1">
+                ☰
+            </button>
+        </div>
     </header>
 
+    <div id="mobileMenu" class="hidden fixed inset-x-0 top-16 bg-gray-950 border-b border-gray-900 z-30 px-6 py-4 space-y-3 font-bold uppercase text-xs tracking-wider md:hidden transition duration-200">
+        <a href="#" class="block text-amber-500 py-2">Home</a>
+        <a href="#" onclick="toggleAuthModal(); toggleMobileMenu();" class="block text-gray-400 hover:text-white py-2">Workouts</a>
+        <a href="#" onclick="toggleAuthModal(); toggleMobileMenu();" class="block text-gray-400 hover:text-white py-2">Nutrition</a>
+        <a href="#" onclick="toggleAuthModal(); toggleMobileMenu();" class="block text-gray-400 hover:text-white py-2">Programs</a>
+        <a href="#" class="block text-gray-400 hover:text-white py-2">About Us</a>
+    </div>
+
     <section class="relative w-full max-w-7xl mx-auto px-6 lg:px-16 pt-12 pb-24 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-        <div class="lg:col-span-7 space-y-6 z-10">
+        <div class="lg:col-span-7 space-y-6 z-10 text-center lg:text-left">
             <div class="space-y-2">
                 <span class="text-xs font-black uppercase tracking-widest text-gray-400 block">Discipline Today, Strength Tomorrow.</span>
                 <h2 class="text-5xl md:text-7xl font-black text-white tracking-tight leading-none uppercase">
@@ -35,43 +51,43 @@
                     <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-500 italic font-serif tracking-wide lowercase">best</span> self.
                 </h2>
             </div>
-            <p class="text-sm text-gray-400 max-w-md leading-relaxed font-medium">
+            <p class="text-sm text-gray-400 max-w-md mx-auto lg:mx-0 leading-relaxed font-medium">
                 Train hard. Eat right. Stay consistent. Transform your body. Transform your life with personalized multi-service analytics.
             </p>
-            <div class="flex flex-wrap gap-4 pt-2">
-                <button onclick="toggleAuthModal()" class="bg-amber-500 hover:bg-amber-400 text-black font-black text-xs uppercase tracking-wider px-6 py-3.5 rounded-lg transition duration-150 shadow-xl shadow-amber-500/20">
+            <div class="flex flex-wrap justify-center lg:justify-start gap-4 pt-2">
+                <button onclick="toggleAuthModal()" class="bg-amber-500 hover:bg-amber-400 text-black font-black text-xs uppercase tracking-wider px-6 py-3.5 rounded-lg transition duration-150 shadow-xl shadow-amber-500/20 cursor-pointer">
                     Start Your Journey
                 </button>
-                <button class="border border-gray-700 hover:border-gray-500 bg-gray-900/40 text-white font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-lg flex items-center space-x-2 transition duration-150">
+                <button class="border border-gray-700 hover:border-gray-500 bg-gray-900/40 text-white font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-lg flex items-center space-x-2 transition duration-150 cursor-pointer">
                     <span>▶</span> <span>Watch Motivation</span>
                 </button>
             </div>
         </div>
 
-        <div class="lg:col-span-5 relative h-[450px] rounded-2xl border border-gray-800 bg-gray-900 overflow-hidden shadow-2xl">
-            <img src="harsh.jpeg" class="w-full h-full object-cover ">
+        <div class="lg:col-span-5 relative h-[350px] md:h-[450px] rounded-2xl border border-gray-800 bg-gray-900 overflow-hidden shadow-2xl">
+            <img src="harsh.jpeg" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-gradient-to-t from-gray-950 via-transparent to-transparent"></div>
-            <div class="absolute bottom-4 left-4 right-4 bg-gray-950/80 border border-gray-800 p-4 rounded-xl backdrop-blur-md flex items-center space-x-3 font-mono text-xs text-amber-400">
-                <span>⚡</span> <span>Active Pipeline Engine Node Running on Port 5001</span>
+            <div class="absolute bottom-4 left-4 right-4 bg-gray-950/80 border border-gray-800 p-4 rounded-xl backdrop-blur-md flex items-center space-x-3 font-mono text-[10px] md:text-xs text-amber-400">
+                <span class="animate-pulse text-sm">⚡</span> <span>Active Pipeline Engine Node Running on Port 5001</span>
             </div>
         </div>
     </section>
 
     <section class="w-full max-w-5xl mx-auto px-6 mb-24">
-        <div class="bg-gray-900/60 border border-gray-850 rounded-2xl p-6 md:p-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-y md:divide-y-0 md:divide-x divide-gray-800">
+        <div class="bg-gray-900/60 border border-gray-800/60 rounded-2xl p-6 md:p-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-center md:divide-x divide-gray-800">
             <div class="space-y-1">
                 <div class="text-2xl font-black text-white">500+</div>
                 <div class="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Workouts</div>
             </div>
-            <div class="space-y-1 pt-4 md:pt-0">
+            <div class="space-y-1">
                 <div class="text-2xl font-black text-white">10K+</div>
                 <div class="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Happy Members</div>
             </div>
-            <div class="space-y-1 pt-4 md:pt-0">
+            <div class="space-y-1 border-t border-gray-800 pt-4 md:pt-0 md:border-t-0">
                 <div class="text-2xl font-black text-white">50+</div>
                 <div class="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Workout Programs</div>
             </div>
-            <div class="space-y-1 pt-4 md:pt-0">
+            <div class="space-y-1 border-t border-gray-800 pt-4 md:pt-0 md:border-t-0">
                 <div class="text-2xl font-black text-amber-400">100%</div>
                 <div class="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Results Driven</div>
             </div>
@@ -119,20 +135,20 @@
                 <h4 class="text-3xl font-black text-white tracking-tight uppercase leading-none">Pain is temporary, <br><span class="text-amber-500 italic font-serif lowercase tracking-wide font-medium">Pride</span> is forever.</h4>
                 <p class="text-xs text-gray-500 font-medium">Join thousands of fitness enthusiasts who chose to take charge of their fitness metrics matrix loop.</p>
             </div>
-            <button onclick="toggleAuthModal()" class="bg-amber-500 hover:bg-amber-400 text-black font-black text-xs uppercase tracking-wider px-8 py-4 rounded-lg transition duration-150 whitespace-nowrap shadow-xl shadow-amber-500/10">
+            <button onclick="toggleAuthModal()" class="bg-amber-500 hover:bg-amber-400 text-black font-black text-xs uppercase tracking-wider px-8 py-4 rounded-lg transition duration-150 whitespace-nowrap shadow-xl shadow-amber-500/10 cursor-pointer">
                 Join Now — Start Free
             </button>
         </div>
     </section>
 
-    <footer class="w-full border-t border-gray-900 py-6 text-center text-[10px] uppercase font-bold tracking-widest text-gray-600 space-x-6">
+    <footer class="w-full border-t border-gray-900 py-6 text-center text-[10px] uppercase font-bold tracking-widest text-gray-600 flex flex-wrap justify-center gap-4 md:gap-6 px-4">
         <span>❌ No Excuses</span> <span>⚡ Consistency is Key</span> <span>🔥 Train Insane</span> <span>🏆 Be Stronger</span>
     </footer>
 
     <div id="authModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-all duration-300">
         <div class="bg-gray-900 border border-gray-800 w-full max-w-sm p-8 rounded-xl shadow-2xl space-y-6 relative m-4">
             
-            <button onclick="toggleAuthModal()" class="absolute top-4 right-4 text-gray-500 hover:text-white text-sm font-bold">✕</button>
+            <button onclick="toggleAuthModal()" class="absolute top-4 right-4 text-gray-500 hover:text-white text-sm font-bold cursor-pointer p-1">✕</button>
             
             <div class="text-center">
                 <h3 class="text-xl font-black uppercase text-amber-500">Secure Access Gate</h3>
@@ -150,7 +166,7 @@
                     <label class="block text-[10px] font-black uppercase tracking-wider text-gray-400 mb-1">Password Identifier</label>
                     <input type="password" id="loginPassword" required class="w-full p-2.5 bg-gray-950 border border-gray-800 rounded text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none text-white">
                 </div>
-                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-black font-black text-xs uppercase tracking-wider py-3 rounded transition duration-150">Authorize Login</button>
+                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-black font-black text-xs uppercase tracking-wider py-3 rounded transition duration-150 cursor-pointer font-bold">Authorize Login</button>
                 <p class="text-center text-[11px] text-gray-500">New to Bulky? <a href="#" id="showRegisterBtn" class="text-amber-400 hover:underline">Register account</a></p>
             </form>
 
@@ -163,13 +179,14 @@
                     <label class="block text-[10px] font-black uppercase tracking-wider text-gray-400 mb-1">Password Secret Key</label>
                     <input type="password" id="regPassword" required class="w-full p-2.5 bg-gray-950 border border-gray-800 rounded text-xs focus:ring-1 focus:ring-amber-500 focus:outline-none text-white">
                 </div>
-                <button type="submit" class="w-full bg-green-600 hover:bg-green-500 text-white font-black text-xs uppercase tracking-wider py-3 rounded transition duration-150">Compile Profile Registry</button>
+                <button type="submit" class="w-full bg-green-600 hover:bg-green-500 text-white font-black text-xs uppercase tracking-wider py-3 rounded transition duration-150 cursor-pointer font-bold">Compile Profile Registry</button>
                 <p class="text-center text-[11px] text-gray-500">Existing user profile? <a href="#" id="showLoginBtn" class="text-amber-400 hover:underline">Return to Login</a></p>
             </form>
         </div>
     </div>
 
     <script>
+        // Modal Entrance Execution Script
         function toggleAuthModal() {
             const modal = document.getElementById('authModal');
             if(modal.classList.contains('hidden')) {
@@ -180,6 +197,27 @@
                 setTimeout(() => modal.classList.add('hidden'), 300);
             }
         }
+
+        // Mobile Top Navigation Bar Toggle Script
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // 🎯 FIXED: Modal Component Navigation Layer Bindings
+        document.getElementById('showRegisterBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.remove('hidden');
+            document.getElementById('authSubtitle').textContent = "Inject identity profiles down to cloud schemas.";
+        });
+
+        document.getElementById('showLoginBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('authSubtitle').textContent = "Provide credentials to resolve token mapping.";
+        });
     </script>
     <script src="js/auth.js"></script>
 </body>
