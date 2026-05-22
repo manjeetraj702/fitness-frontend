@@ -1,5 +1,5 @@
 // Global Environment Gateway Configuration
-const API_BASE_URL = "http://localhost:8080";
+const API_BASE_URL = "https://fitness-backend-b8r0.onrender.com";
 
 const loginForm = document.getElementById('loginForm');
 const registerForm = document.getElementById('registerForm');
