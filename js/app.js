@@ -74,6 +74,7 @@ if (metricsForm) {
                 document.getElementById('workoutMainWorkspace').classList.remove('hidden');
                 document.getElementById('wkFocus').textContent = pred.workoutPlan.focus;
                 document.getElementById('wkFrequency').textContent = pred.workoutPlan.frequency;
+                document.getElementById('workoutProTip').textContent = pred.workoutPlan.proTipWarning || "";
 
                 const routineContainer = document.getElementById('workoutRoutineContainer');
                 routineContainer.innerHTML = '';
@@ -94,13 +95,17 @@ if (metricsForm) {
 
                 const mealsContainer = document.getElementById('mealsRoutineContainer');
                 mealsContainer.innerHTML = '';
-                pred.mealPlan.days.forEach(meal => {
+                
+                pred.mealPlan.days.forEach((meal, index) => {
+                    const escapedDetails = meal.details.replace(/"/g, '&quot;');
                     mealsContainer.innerHTML += `
-                        <div class="bg-gray-950 p-4 rounded-xl border border-gray-850">
-                            <span class="text-[10px] font-bold text-amber-400 uppercase tracking-widest block font-mono">${meal.time}</span>
+                        <div onclick="updateDietPresentationHub('${meal.time}', '${meal.dish}', '${escapedDetails}')" 
+                             class="bg-gray-950 p-4 rounded-xl border border-gray-850 hover:border-amber-500/40 transition duration-150 cursor-pointer">
+                            <span class="text-[10px] font-bold text-amber-500 uppercase tracking-widest block font-mono">${meal.time}</span>
                             <h4 class="text-sm font-black text-white mt-1">${meal.dish}</h4>
-                            <p class="text-xs text-gray-400 mt-1 leading-relaxed">${meal.details}</p>
+                            <p class="text-xs text-gray-500 mt-1 line-clamp-1">${meal.details}</p>
                         </div>`;
+                    if (index === 0) updateDietPresentationHub(meal.time, meal.dish, meal.details);
                 });
             }
 
@@ -122,12 +127,23 @@ if (metricsForm) {
             showToast("Pipeline targets generated successfully!");
         } catch (err) {
             showToast(err.message, "error");
-        } days: {
+        } finally {
             submitBtn.textContent = 'Execute Pipeline';
             submitBtn.disabled = false;
         }
     });
 }
+
+window.updateDietPresentationHub = function(time, dish, details) {
+    const titleNode = document.getElementById('foodGuideTitle');
+    const descNode = document.getElementById('foodGuideDetails');
+    const imageNode = document.getElementById('foodGuideImage');
+    if (titleNode && descNode) {
+        titleNode.textContent = `${time}: ${dish}`;
+        descNode.textContent = details;
+        if (imageNode) { imageNode.classList.remove('opacity-40'); imageNode.classList.add('opacity-80'); }
+    }
+};
 
 const calorieCalculatorForm = document.getElementById('calorieCalculatorForm');
 if (calorieCalculatorForm) {
@@ -137,14 +153,14 @@ if (calorieCalculatorForm) {
         calcBtn.textContent = "Logging Item...";
         calcBtn.disabled = true;
 
+        const foodKey = document.getElementById("foodKey").value;
+        const quantityAmount = parseFloat(document.getElementById("quantityAmount").value);
+
         try {
             const response = await fetch(`${API_BASE_URL}/api/v1/features/calculate-food`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
-                body: JSON.stringify({
-                    foodKey: document.getElementById("foodKey").value,
-                    quantityAmount: parseFloat(document.getElementById("quantityAmount").value)
-                })
+                body: JSON.stringify({ foodKey, quantityAmount })
             });
 
             if (!response.ok) throw new Error("Food log engine connection broken.");
@@ -157,7 +173,23 @@ if (calorieCalculatorForm) {
             document.getElementById("calcCarb").textContent = data.computedMetrics.carbs;
             document.getElementById("calcFat").textContent = data.computedMetrics.fats;
 
+            const journalContainer = document.getElementById('calorieJournalContainer');
+            if (journalContainer) {
+                const logEntry = document.createElement('div');
+                logEntry.className = "flex justify-between items-center bg-gray-950 p-3 rounded-xl border border-gray-850 text-xs mt-2";
+                logEntry.innerHTML = `
+                    <div class="flex items-center space-x-2">
+                        <span class="text-amber-500">🔥</span>
+                        <div><span class="font-bold text-white block">${data.itemName}</span><span class="text-[10px] text-gray-500 font-mono">${data.servingLogged}</span></div>
+                    </div>
+                    <div class="text-right">
+                        <span class="font-black text-amber-400 block">${data.computedMetrics.calories} kcal</span>
+                        <span class="text-[9px] text-gray-500 font-mono">P: ${data.computedMetrics.protein}g | C: ${data.computedMetrics.carbs}g</span>
+                    </div>`;
+                journalContainer.insertBefore(logEntry, journalContainer.firstChild);
+            }
             showToast(`Registered ${data.itemName} to ledger.`);
+            calorieCalculatorForm.reset();
         } catch (err) {
             showToast(err.message, "error");
         } finally {
@@ -166,6 +198,20 @@ if (calorieCalculatorForm) {
         }
     });
 }
+
+window.clearDailyLogJournal = function() {
+    const journalContainer = document.getElementById('calorieJournalContainer');
+    if (journalContainer) {
+        journalContainer.innerHTML = '';
+        showToast("Active intake log session cleared.");
+        document.getElementById("loggedFoodName").textContent = "-";
+        document.getElementById("loggedServingSize").textContent = "-";
+        document.getElementById("calcCal").textContent = "0";
+        document.getElementById("calcProt").textContent = "0";
+        document.getElementById("calcCarb").textContent = "0";
+        document.getElementById("calcFat").textContent = "0";
+    }
+};
 
 function bindNavigationTab(elementId, viewId) {
     const triggerBtn = document.getElementById(elementId);

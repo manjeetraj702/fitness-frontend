@@ -81,11 +81,12 @@
 
         <div id="workoutView" class="view-panel hidden space-y-6">
           <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 shadow-xl"><h2 class="text-base font-black text-white uppercase">Hypertrophy Split Structures</h2></div>
-          <div id="workoutPlaceholder" class="bg-gray-900 border border-gray-800 rounded-2xl p-12 text-center text-gray-500 text-xs shadow-xl">🛡️ Submit Biometrics vector to compile splits.</div>
+          <div id="workoutPlaceholder" class="bg-gray-900 border border-gray-800 rounded-2xl p-12 text-center text-gray-500 text-xs shadow-xl">🛡      Submit Biometrics vector to compile splits.</div>
           <div id="workoutMainWorkspace" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4" id="workoutRoutineContainer"></div>
+            <div class="lg:col-span-2 space-y-4" id="workoutRoutineContainer"></div>
             <div class="bg-gray-900 border border-gray-800 rounded-2xl p-4 shadow-xl h-fit sticky top-24">
-              <h4 id="liveGuideTitle" class="text-sm font-bold text-white mb-3">Live Plan Focus Matrix</h4>
+              <h4 id="liveGuideTitle" class="text-sm font-bold text-white mb-2">Live Plan Focus Matrix</h4>
+              <p id="workoutProTip" class="text-[11px] text-orange-400 font-medium bg-orange-950/20 border border-orange-900/30 p-2.5 rounded-xl mb-3 leading-relaxed">...</p>
               <img id="liveGuideImage" src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=600&auto=format&fit=crop" class="w-full h-44 object-cover rounded-xl opacity-40 border border-gray-800" />
               <div class="mt-4 flex space-x-3 text-[11px] font-mono text-gray-400">
                 <div>Focus: <span class="text-white font-bold" id="wkFocus">...</span></div>
@@ -102,6 +103,7 @@
             <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4" id="mealsRoutineContainer"></div>
             <div class="bg-gray-900 border border-gray-800 rounded-2xl p-4 shadow-xl h-fit sticky top-24">
               <h4 id="foodGuideTitle" class="text-sm font-bold text-white mb-2">Diet Presentation Hub</h4>
+              <p id="foodGuideDetails" class="text-xs text-gray-400 mb-4 leading-relaxed font-medium">Select a meal card to view distribution details.</p>
               <img id="foodGuideImage" src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=600&auto=format&fit=crop" class="w-full h-40 object-cover rounded-xl opacity-40 border border-gray-800" />
               <div class="mt-4 text-[10px] bg-amber-500/5 text-amber-400 border border-amber-500/10 px-3 py-2 rounded-xl text-center font-semibold" id="dietStrategyLabel">Processing Macro Strategies...</div>
             </div>
