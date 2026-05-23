@@ -1,266 +1,627 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="h-full bg-gray-950">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bulky Fitness - AI Analytics Dashboard</title>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <style>
-        /* Smooth scrolling and theme micro-adjustments */
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #0b0f19; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #1f293d; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
-    </style>
-</head>
-<body class="h-full text-gray-200 antialiased font-sans custom-scrollbar">
 
-    <header class="bg-gray-900/80 backdrop-blur border-b border-gray-800 fixed top-0 inset-x-0 h-16 z-40 flex items-center justify-between px-4 lg:px-8">
-        <div class="flex items-center space-x-3">
-            <div class="bg-gradient-to-tr from-blue-600 to-indigo-600 p-2 rounded-xl text-white font-black tracking-tighter text-sm shadow-md shadow-blue-600/20">
-                BF
-            </div>
-            <span class="text-base font-black tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">BULKY FITNESS <span class="text-xs text-blue-500 font-mono">AI v2.0</span></span>
+    <style>
+      /* Smooth scrolling and theme micro-adjustments */
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: #0b0f19;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #1f293d;
+        border-radius: 10px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #3b82f6;
+      }
+    </style>
+  </head>
+  <body class="h-full text-gray-200 antialiased font-sans custom-scrollbar">
+    <header
+      class="bg-gray-900/80 backdrop-blur border-b border-gray-800 fixed top-0 inset-x-0 h-16 z-40 flex items-center justify-between px-4 lg:px-8"
+    >
+      <div class="flex items-center space-x-3">
+        <div
+          class="bg-gradient-to-tr from-blue-600 to-indigo-600 p-2 rounded-xl text-white font-black tracking-tighter text-sm shadow-md shadow-blue-600/20"
+        >
+          BF
         </div>
-        
-        <div class="flex items-center space-x-4">
-            <div id="streakDisplay" class="hidden sm:block"></div>
-            <div class="flex items-center space-x-2 bg-gray-950 border border-gray-800 px-3 py-1.5 rounded-xl">
-                <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                <span id="userDisplay" class="text-xs font-mono font-bold text-gray-300">Syncing...</span>
-            </div>
+        <span
+          class="text-base font-black tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent"
+          >BULKY FITNESS
+          <span class="text-xs text-blue-500 font-mono">AI v2.0</span></span
+        >
+      </div>
+
+      <div class="flex items-center space-x-4">
+        <div id="streakDisplay" class="hidden sm:block"></div>
+        <div
+          class="flex items-center space-x-2 bg-gray-950 border border-gray-800 px-3 py-1.5 rounded-xl"
+        >
+          <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+          <span
+            id="userDisplay"
+            class="text-xs font-mono font-bold text-gray-300"
+            >Syncing...</span
+          >
         </div>
+      </div>
     </header>
 
     <div class="flex pt-16 h-full min-h-screen">
-        
-        <aside class="hidden lg:flex flex-col w-64 bg-gray-900 border-r border-gray-800 fixed inset-y-0 left-0 pt-16 z-30 justify-between p-4">
-            <nav class="space-y-1.5">
-                <button id="navBiometrics" class="w-full flex items-center space-x-3 px-4 py-3 bg-blue-600 rounded-xl text-left text-sm font-semibold text-white transition duration-150 shadow-lg shadow-blue-600/10">
-                    <span>📊</span> <span>AI Biometrics Engine</span>
-                </button>
-                <button id="navWorkout" class="w-full flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl text-left text-sm font-semibold text-gray-400 hover:text-white transition duration-150">
-                    <span>🏋️‍♂️</span> <span>Workout Generator</span>
-                </button>
-                <button id="navMeals" class="w-full flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl text-left text-sm font-semibold text-gray-400 hover:text-white transition duration-150">
-                    <span>🍳</span> <span>Nutrition Blueprint</span>
-                </button>
-                <button id="navNutrition" class="w-full flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl text-left text-sm font-semibold text-gray-400 hover:text-white transition duration-150">
-                    <span>🍽️</span> <span>Indian Food Logger</span>
-                </button>
-            </nav>
+      <aside
+        class="hidden lg:flex flex-col w-64 bg-gray-900 border-r border-gray-800 fixed inset-y-0 left-0 pt-16 z-30 justify-between p-4"
+      >
+        <nav class="space-y-1.5">
+          <button
+            id="navBiometrics"
+            class="w-full flex items-center space-x-3 px-4 py-3 bg-blue-600 rounded-xl text-left text-sm font-semibold text-white transition duration-150 shadow-lg shadow-blue-600/10"
+          >
+            <span>📊</span> <span>AI Biometrics Engine</span>
+          </button>
+          <button
+            id="navWorkout"
+            class="w-full flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl text-left text-sm font-semibold text-gray-400 hover:text-white transition duration-150"
+          >
+            <span>🏋️‍♂️</span> <span>Workout Generator</span>
+          </button>
+          <button
+            id="navMeals"
+            class="w-full flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl text-left text-sm font-semibold text-gray-400 hover:text-white transition duration-150"
+          >
+            <span>🍳</span> <span>Nutrition Blueprint</span>
+          </button>
+          <button
+            id="navNutrition"
+            class="w-full flex items-center space-x-3 px-4 py-3 hover:bg-gray-800 rounded-xl text-left text-sm font-semibold text-gray-400 hover:text-white transition duration-150"
+          >
+            <span>🍽️</span> <span>Indian Food Logger</span>
+          </button>
+        </nav>
 
-            <button id="logoutBtn" class="w-full flex items-center space-x-3 px-4 py-3 text-gray-500 hover:text-red-400 text-sm font-bold tracking-tight bg-gray-950/40 hover:bg-red-950/20 rounded-xl border border-gray-850 hover:border-red-900/30 transition duration-150">
-                <span>🚪</span> <span>Disconnect Terminal</span>
-            </button>
-        </aside>
+        <button
+          id="logoutBtn"
+          class="w-full flex items-center space-x-3 px-4 py-3 text-gray-500 hover:text-red-400 text-sm font-bold tracking-tight bg-gray-950/40 hover:bg-red-950/20 rounded-xl border border-gray-850 hover:border-red-900/30 transition duration-150"
+        >
+          <span>🚪</span> <span>Disconnect Terminal</span>
+        </button>
+      </aside>
 
-        <div class="lg:hidden fixed bottom-0 inset-x-0 bg-gray-900/95 backdrop-blur-md border-t border-gray-800 h-16 z-40 flex items-center justify-around px-2 shadow-2xl">
-            <button onclick="document.getElementById('navBiometrics').click()" class="flex flex-col items-center space-y-0.5 text-blue-500">
-                <span class="text-xl">📊</span><span class="text-[10px] font-bold">Biometrics</span>
-            </button>
-            <button onclick="document.getElementById('navWorkout').click()" class="flex flex-col items-center space-y-0.5 text-gray-400">
-                <span class="text-xl">🏋️‍♂️</span><span class="text-[10px] font-bold">Workout</span>
-            </button>
-            <button onclick="document.getElementById('navMeals').click()" class="flex flex-col items-center space-y-0.5 text-gray-400">
-                <span class="text-xl">🍳</span><span class="text-[10px] font-bold">Nutrition</span>
-            </button>
-            <button onclick="document.getElementById('navNutrition').click()" class="flex flex-col items-center space-y-0.5 text-gray-400">
-                <span class="text-xl">🍽️</span><span class="text-[10px] font-bold">Food Logger</span>
-            </button>
+      <div
+        class="lg:hidden fixed bottom-0 inset-x-0 bg-gray-900/95 backdrop-blur-md border-t border-gray-800 h-16 z-40 flex items-center justify-around px-2 shadow-2xl"
+      >
+        <button
+          onclick="document.getElementById('navBiometrics').click()"
+          class="flex flex-col items-center space-y-0.5 text-blue-500"
+        >
+          <span class="text-xl">📊</span
+          ><span class="text-[10px] font-bold">Biometrics</span>
+        </button>
+        <button
+          onclick="document.getElementById('navWorkout').click()"
+          class="flex flex-col items-center space-y-0.5 text-gray-400"
+        >
+          <span class="text-xl">🏋️‍♂️</span
+          ><span class="text-[10px] font-bold">Workout</span>
+        </button>
+        <button
+          onclick="document.getElementById('navMeals').click()"
+          class="flex flex-col items-center space-y-0.5 text-gray-400"
+        >
+          <span class="text-xl">🍳</span
+          ><span class="text-[10px] font-bold">Nutrition</span>
+        </button>
+        <button
+          onclick="document.getElementById('navNutrition').click()"
+          class="flex flex-col items-center space-y-0.5 text-gray-400"
+        >
+          <span class="text-xl">🍽️</span
+          ><span class="text-[10px] font-bold">Food Logger</span>
+        </button>
+      </div>
+
+      <main class="w-full lg:pl-64 pb-24 lg:pb-8 p-4 lg:p-8 overflow-y-auto">
+        <div id="biometricsView" class="view-panel space-y-6">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div
+              class="bg-gray-900 border border-gray-800 rounded-2xl p-5 lg:p-6 shadow-xl flex flex-col justify-between"
+            >
+              <div>
+                <h2
+                  class="text-lg font-black text-white uppercase tracking-tight"
+                >
+                  Biometric Vectors
+                </h2>
+                <p class="text-xs text-gray-400 mt-1 mb-5">
+                  Input parameters to execute dynamic machine learning
+                  predictions.
+                </p>
+
+                <form id="metricsForm" class="space-y-4">
+                  <div>
+                    <label
+                      class="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5"
+                      >Age Vector</label
+                    >
+                    <input
+                      type="number"
+                      id="age"
+                      value="23"
+                      required
+                      class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-sm font-mono focus:border-blue-500 focus:outline-none text-white"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      class="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5"
+                      >Body Weight (kg)</label
+                    >
+                    <input
+                      type="number"
+                      step="0.1"
+                      id="weight"
+                      value="72.5"
+                      required
+                      class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-sm font-mono focus:border-blue-500 focus:outline-none text-white"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      class="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5"
+                      >Height Spectrum (cm)</label
+                    >
+                    <input
+                      type="number"
+                      id="height"
+                      value="178"
+                      required
+                      class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-sm font-mono focus:border-blue-500 focus:outline-none text-white"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      class="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5"
+                      >Optimization Goal</label
+                    >
+                    <select
+                      id="goal"
+                      class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:outline-none text-white"
+                    >
+                      <option value="bulk">
+                        Hypertrophy Surpluses (Bulk) 🏋️
+                      </option>
+                      <option value="cut">Fat Reduction (Cut) 🔥</option>
+                      <option value="maintain">Maintenance ⚖️</option>
+                    </select>
+                  </div>
+                  <button
+                    type="submit"
+                    id="submitBtn"
+                    class="w-full mt-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-3 rounded-xl transition duration-150 shadow-md shadow-blue-600/10 cursor-pointer"
+                  >
+                    Execute Pipeline
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            <div class="lg:col-span-2 space-y-6">
+              <div
+                id="placeholderState"
+                class="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center flex flex-col items-center justify-center min-h-[350px] shadow-xl"
+              >
+                <div class="text-4xl animate-bounce mb-3">🤖</div>
+                <h3
+                  class="text-sm font-bold text-white uppercase tracking-wider"
+                >
+                  Awaiting Execution Handshake
+                </h3>
+                <p class="text-xs text-gray-400 max-w-xs mt-1 leading-relaxed">
+                  Fill in your weight matrix configurations and run the
+                  analytics execution model pipeline.
+                </p>
+              </div>
+
+              <div
+                id="resultsDashboard"
+                class="hidden bg-gray-900 border border-gray-800 rounded-2xl p-5 lg:p-6 shadow-xl space-y-6"
+              >
+                <div
+                  class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-gray-800 pb-4"
+                >
+                  <div>
+                    <h3
+                      class="text-base font-black text-white uppercase tracking-tight"
+                    >
+                      AI Generated Targets
+                    </h3>
+                    <div
+                      class="flex items-center space-x-1.5 text-[11px] font-mono text-gray-400 mt-0.5"
+                    >
+                      <span>Engine:</span>
+                      <span id="algoOutput" class="text-blue-400 font-bold"
+                        >...</span
+                      >
+                    </div>
+                  </div>
+                  <div
+                    class="bg-gray-950 border border-gray-800 p-3 rounded-xl"
+                  >
+                    <span
+                      class="block text-[10px] font-black uppercase tracking-wider text-gray-500"
+                      >Target Energy Baseline</span
+                    >
+                    <h1
+                      id="caloricOutput"
+                      class="text-2xl font-black text-blue-400 mt-0.5"
+                    >
+                      0
+                      <span class="text-xs font-normal text-gray-500"
+                        >kcal/day</span
+                      >
+                    </h1>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
+                  <div
+                    class="relative h-44 w-full flex items-center justify-center bg-gray-950 rounded-xl p-4 border border-gray-850"
+                  >
+                    <canvas id="macroChart"></canvas>
+                  </div>
+                  <div class="space-y-2.5">
+                    <div
+                      class="flex items-center justify-between bg-gray-950 p-3 rounded-xl border border-gray-850"
+                    >
+                      <div class="flex items-center space-x-2">
+                        <div class="w-2.5 h-2.5 rounded-full bg-red-500"></div>
+                        <span class="text-xs font-bold text-gray-300"
+                          >Protein Target</span
+                        >
+                      </div>
+                      <span
+                        id="pOutput"
+                        class="text-xs font-mono font-black text-white"
+                        >0g</span
+                      >
+                    </div>
+                    <div
+                      class="flex items-center justify-between bg-gray-950 p-3 rounded-xl border border-gray-850"
+                    >
+                      <div class="flex items-center space-x-2">
+                        <div
+                          class="w-2.5 h-2.5 rounded-full bg-amber-500"
+                        ></div>
+                        <span class="text-xs font-bold text-gray-300"
+                          >Carbohydrates</span
+                        >
+                      </div>
+                      <span
+                        id="cOutput"
+                        class="text-xs font-mono font-black text-white"
+                        >0g</span
+                      >
+                    </div>
+                    <div
+                      class="flex items-center justify-between bg-gray-950 p-3 rounded-xl border border-gray-850"
+                    >
+                      <div class="flex items-center space-x-2">
+                        <div class="w-2.5 h-2.5 rounded-full bg-blue-500"></div>
+                        <span class="text-xs font-bold text-gray-300"
+                          >Dietary Fats</span
+                        >
+                      </div>
+                      <span
+                        id="fOutput"
+                        class="text-xs font-mono font-black text-white"
+                        >0g</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <main class="w-full lg:pl-64 pb-24 lg:pb-8 p-4 lg:p-8 overflow-y-auto">
+        <div id="workoutView" class="view-panel hidden space-y-6">
+          <div
+            class="bg-gray-900 border border-gray-800 rounded-2xl p-5 shadow-xl"
+          >
+            <h2
+              class="text-base font-black text-white uppercase tracking-tight"
+            >
+              Hypertrophy Split Structures
+            </h2>
+            <p class="text-xs text-gray-400 mt-0.5">
+              Ensemble matrix configurations extracted from your optimization
+              profiles.
+            </p>
+          </div>
 
-            <div id="biometricsView" class="view-panel space-y-6">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    
-                    <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 lg:p-6 shadow-xl flex flex-col justify-between">
-                        <div>
-                            <h2 class="text-lg font-black text-white uppercase tracking-tight">Biometric Vectors</h2>
-                            <p class="text-xs text-gray-400 mt-1 mb-5">Input parameters to execute dynamic machine learning predictions.</p>
-                            
-                            <form id="metricsForm" class="space-y-4">
-                                <div>
-                                    <label class="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5">Age Vector</label>
-                                    <input type="number" id="age" value="23" required class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-sm font-mono focus:border-blue-500 focus:outline-none text-white">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5">Body Weight (kg)</label>
-                                    <input type="number" step="0.1" id="weight" value="72.5" required class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-sm font-mono focus:border-blue-500 focus:outline-none text-white">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5">Height Spectrum (cm)</label>
-                                    <input type="number" id="height" value="178" required class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-sm font-mono focus:border-blue-500 focus:outline-none text-white">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5">Optimization Goal</label>
-                                    <select id="goal" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:outline-none text-white">
-                                        <option value="Cut">Caloric Deficit (Cut) 🩸</option>
-                                        <option value="Maintain">Energy Balance (Maintain) ⚖️</option>
-                                        <option value="Bulk" selected>Hypertrophy Surpluses (Bulk) 🏗️</option>
-                                    </select>
-                                </div>
-                                <button type="submit" id="submitBtn" class="w-full mt-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-3 rounded-xl transition duration-150 shadow-md shadow-blue-600/10 cursor-pointer">
-                                    Execute Pipeline
-                                </button>
-                            </form>
-                        </div>
-                    </div>
+          <div
+            id="workoutPlaceholder"
+            class="bg-gray-900 border border-gray-800 rounded-2xl p-12 text-center text-gray-500 text-xs shadow-xl"
+          >
+            🛡️ Load and submit your primary Biometrics vector to compile
+            muscle-building splits.
+          </div>
 
-                    <div class="lg:col-span-2 space-y-6">
-                        <div id="placeholderState" class="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center flex flex-col items-center justify-center min-h-[350px] shadow-xl">
-                            <div class="text-4xl animate-bounce mb-3">🤖</div>
-                            <h3 class="text-sm font-bold text-white uppercase tracking-wider">Awaiting Execution Handshake</h3>
-                            <p class="text-xs text-gray-400 max-w-xs mt-1 leading-relaxed">Fill in your weight matrix configurations and run the analytics execution model pipeline.</p>
-                        </div>
-
-                        <div id="resultsDashboard" class="hidden bg-gray-900 border border-gray-800 rounded-2xl p-5 lg:p-6 shadow-xl space-y-6">
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-gray-800 pb-4">
-                                <div>
-                                    <h3 class="text-base font-black text-white uppercase tracking-tight">AI Generated Targets</h3>
-                                    <div class="flex items-center space-x-1.5 text-[11px] font-mono text-gray-400 mt-0.5">
-                                        <span>Engine:</span> <span id="algoOutput" class="text-blue-400 font-bold">...</span>
-                                    </div>
-                                </div>
-                                <div class="bg-gray-950 border border-gray-800 p-3 rounded-xl">
-                                    <span class="block text-[10px] font-black uppercase tracking-wider text-gray-500">Target Energy Baseline</span>
-                                    <h1 id="caloricOutput" class="text-2xl font-black text-blue-400 mt-0.5">0 <span class="text-xs font-normal text-gray-500">kcal/day</span></h1>
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
-                                <div class="relative h-44 w-full flex items-center justify-center bg-gray-950 rounded-xl p-4 border border-gray-850">
-                                    <canvas id="macroChart"></canvas>
-                                </div>
-                                <div class="space-y-2.5">
-                                    <div class="flex items-center justify-between bg-gray-950 p-3 rounded-xl border border-gray-850">
-                                        <div class="flex items-center space-x-2"><div class="w-2.5 h-2.5 rounded-full bg-red-500"></div><span class="text-xs font-bold text-gray-300">Protein Target</span></div>
-                                        <span id="pOutput" class="text-xs font-mono font-black text-white">0g</span>
-                                    </div>
-                                    <div class="flex items-center justify-between bg-gray-950 p-3 rounded-xl border border-gray-850">
-                                        <div class="flex items-center space-x-2"><div class="w-2.5 h-2.5 rounded-full bg-amber-500"></div><span class="text-xs font-bold text-gray-300">Carbohydrates</span></div>
-                                        <span id="cOutput" class="text-xs font-mono font-black text-white">0g</span>
-                                    </div>
-                                    <div class="flex items-center justify-between bg-gray-950 p-3 rounded-xl border border-gray-850">
-                                        <div class="flex items-center space-x-2"><div class="w-2.5 h-2.5 rounded-full bg-blue-500"></div><span class="text-xs font-bold text-gray-300">Dietary Fats</span></div>
-                                        <span id="fOutput" class="text-xs font-mono font-black text-white">0g</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+          <div
+            id="workoutMainWorkspace"
+            class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6"
+          >
+            <div
+              class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4"
+              id="workoutRoutineContainer"
+            ></div>
+            <div
+              class="bg-gray-900 border border-gray-800 rounded-2xl p-4 shadow-xl h-fit sticky top-24"
+            >
+              <span
+                class="text-[10px] font-black uppercase text-blue-500 tracking-widest font-mono block mb-1"
+                >Live Execution Guide</span
+              >
+              <h4 id="liveGuideTitle" class="text-sm font-bold text-white mb-3">
+                Hover over any routine entry
+              </h4>
+              <img
+                id="liveGuideImage"
+                src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=600&auto=format&fit=crop"
+                class="w-full h-44 object-cover rounded-xl opacity-40 transition-opacity duration-200 border border-gray-800"
+              />
+              <div
+                class="mt-4 flex space-x-3 text-[11px] font-mono text-gray-400"
+              >
+                <div>
+                  <span class="text-white block font-bold" id="wkFocus"
+                    >...</span
+                  >
+                  Focus Metric
                 </div>
+                <div class="border-l border-gray-800 pl-3">
+                  <span class="text-white block font-bold" id="wkFrequency"
+                    >...</span
+                  >
+                  Split Volume
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="mealsView" class="view-panel hidden space-y-6">
+          <div
+            class="bg-gray-900 border border-gray-800 rounded-2xl p-5 shadow-xl"
+          >
+            <h2
+              class="text-base font-black text-white uppercase tracking-tight"
+            >
+              AI Nutrition Structural Blueprint
+            </h2>
+            <p class="text-xs text-gray-400 mt-0.5">
+              Dietary distribution frameworks scaled straight to your dry body
+              mass variables.
+            </p>
+          </div>
+
+          <div
+            id="mealsPlaceholder"
+            class="bg-gray-900 border border-gray-800 rounded-2xl p-12 text-center text-gray-500 text-xs shadow-xl"
+          >
+            🥗 Run a biometrics inference sequence to synthesize micro-nutrient
+            schedules.
+          </div>
+
+          <div
+            id="mealsMainWorkspace"
+            class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6"
+          >
+            <div
+              class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4"
+              id="mealsRoutineContainer"
+            ></div>
+            <div
+              class="bg-gray-900 border border-gray-800 rounded-2xl p-4 shadow-xl h-fit sticky top-24"
+            >
+              <span
+                class="text-[10px] font-black uppercase text-amber-500 tracking-widest font-mono block mb-1"
+                >Diet Presentation Hub</span
+              >
+              <h4 id="foodGuideTitle" class="text-sm font-bold text-white mb-2">
+                Select a menu card item
+              </h4>
+              <p
+                id="foodGuideDetails"
+                class="text-xs text-gray-400 mb-4 leading-relaxed font-medium"
+              >
+                Macro parameters will render structural visuals here.
+              </p>
+              <img
+                id="foodGuideImage"
+                src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=600&auto=format&fit=crop"
+                class="w-full h-40 object-cover rounded-xl opacity-40 transition-all duration-300 border border-gray-800"
+              />
+              <div
+                class="mt-4 text-[10px] bg-amber-500/5 text-amber-400 border border-amber-500/10 px-3 py-2 rounded-xl text-center font-semibold uppercase tracking-wider"
+                id="dietStrategyLabel"
+              >
+                Processing Macro Strategies...
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="nutritionView" class="view-panel hidden space-y-6">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div
+              class="bg-gray-900 border border-gray-800 rounded-2xl p-5 lg:p-6 shadow-xl flex flex-col justify-between"
+            >
+              <div>
+                <h2
+                  class="text-lg font-black text-white uppercase tracking-tight"
+                >
+                  Desi Macro Registry
+                </h2>
+                <p class="text-xs text-gray-400 mt-1 mb-5">
+                  Proxy linear logging configurations for traditional Indian
+                  ingredients.
+                </p>
+
+                <form id="calorieCalculatorForm" class="space-y-4">
+                  <div>
+                    <label
+                      class="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5"
+                      >Select Ingredient</label
+                    >
+                    <select
+                      id="foodKey"
+                      class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:outline-none text-white"
+                    >
+                      <option value="paneer">
+                        Paneer (Raw Dairy Cubes) 🥛
+                      </option>
+                      <option value="rice">
+                        Basmati Rice (Boiled Core) 🍚
+                      </option>
+                      <option value="roti">
+                        Whole Wheat Roti (Per Piece) 🫓
+                      </option>
+                      <option value="egg">Whole Poultry Egg (Boiled) 🥚</option>
+                      <option value="soybean">
+                        Soybean Chunks (High Protein Raw) 🧆
+                      </option>
+                      <option value="oats">Rolled Oats Baseline 🥣</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label
+                      class="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5"
+                      >Quantity / Scale Logged</label
+                    >
+                    <input
+                      type="number"
+                      id="quantityAmount"
+                      placeholder="e.g. 150g or 3 pieces"
+                      required
+                      class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-sm font-mono focus:border-blue-500 focus:outline-none text-white"
+                    />
+                    <p class="text-[10px] text-gray-500 mt-1 font-medium">
+                      Use grams for raw ingredients, or item counts for eggs and
+                      rotis.
+                    </p>
+                  </div>
+                  <button
+                    type="submit"
+                    id="calcBtn"
+                    class="w-full mt-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white font-bold py-3 rounded-xl transition duration-150 shadow-md shadow-orange-500/10 cursor-pointer"
+                  >
+                    Log to Daily Summary
+                  </button>
+                </form>
+              </div>
             </div>
 
-            <div id="workoutView" class="view-panel hidden space-y-6">
-                <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 shadow-xl">
-                    <h2 class="text-base font-black text-white uppercase tracking-tight">Hypertrophy Split Structures</h2>
-                    <p class="text-xs text-gray-400 mt-0.5">Ensemble matrix configurations extracted from your optimization profiles.</p>
+            <div class="lg:col-span-2 space-y-6">
+              <div
+                class="bg-gray-900 border border-gray-800 rounded-2xl p-5 lg:p-6 shadow-xl space-y-4"
+              >
+                <h3
+                  class="text-sm font-black text-white uppercase tracking-wider border-b border-gray-800 pb-3"
+                >
+                  Incremental Transaction Metrics
+                </h3>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+                  <div
+                    class="bg-gray-950 p-3 rounded-xl border border-gray-850"
+                  >
+                    <span
+                      class="block text-[10px] font-black text-gray-500 uppercase"
+                      >Item Evaluated</span
+                    ><span
+                      id="loggedFoodName"
+                      class="text-xs font-bold text-white block mt-1"
+                      >-</span
+                    >
+                  </div>
+                  <div
+                    class="bg-gray-950 p-3 rounded-xl border border-gray-850"
+                  >
+                    <span
+                      class="block text-[10px] font-black text-gray-500 uppercase"
+                      >Weight Tracked</span
+                    ><span
+                      id="loggedServingSize"
+                      class="text-xs font-mono font-bold text-white block mt-1"
+                      >-</span
+                    >
+                  </div>
+                  <div
+                    class="bg-gray-950 p-3 rounded-xl border border-gray-850"
+                  >
+                    <span
+                      class="block text-[10px] font-black text-gray-500 uppercase"
+                      >Net Calories</span
+                    ><span
+                      class="text-xs font-mono font-black text-amber-400 block mt-1"
+                      ><span id="calcCal">0</span> kcal</span
+                    >
+                  </div>
+                  <div
+                    class="bg-gray-950 p-3 rounded-xl border border-gray-850"
+                  >
+                    <span
+                      class="block text-[10px] font-black text-gray-500 uppercase"
+                      >Macro Vector</span
+                    ><span
+                      class="text-[10px] font-mono text-gray-400 block mt-1"
+                      >P:<span id="calcProt" class="text-white">0</span
+                      >g|C:<span id="calcCarb" class="text-white">0</span
+                      >g|F:<span id="calcFat" class="text-white">0</span>g</span
+                    >
+                  </div>
                 </div>
-                
-                <div id="workoutPlaceholder" class="bg-gray-900 border border-gray-800 rounded-2xl p-12 text-center text-gray-500 text-xs shadow-xl">
-                    🛡️ Load and submit your primary Biometrics vector to compile muscle-building splits.
-                </div>
+              </div>
 
-                <div id="workoutMainWorkspace" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4" id="workoutRoutineContainer"></div>
-                    <div class="bg-gray-900 border border-gray-800 rounded-2xl p-4 shadow-xl h-fit sticky top-24">
-                        <span class="text-[10px] font-black uppercase text-blue-500 tracking-widest font-mono block mb-1">Live Execution Guide</span>
-                        <h4 id="liveGuideTitle" class="text-sm font-bold text-white mb-3">Hover over any routine entry</h4>
-                        <img id="liveGuideImage" src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=600&auto=format&fit=crop" class="w-full h-44 object-cover rounded-xl opacity-40 transition-opacity duration-200 border border-gray-800">
-                        <div class="mt-4 flex space-x-3 text-[11px] font-mono text-gray-400">
-                            <div><span class="text-white block font-bold" id="wkFocus">...</span> Focus Metric</div>
-                            <div class="border-l border-gray-800 pl-3"><span class="text-white block font-bold" id="wkFrequency">...</span> Split Volume</div>
-                        </div>
-                    </div>
+              <div
+                class="bg-gray-900 border border-gray-800 rounded-2xl p-5 lg:p-6 shadow-xl space-y-4"
+              >
+                <div
+                  class="flex justify-between items-center border-b border-gray-800 pb-3"
+                >
+                  <h3
+                    class="text-sm font-black text-white uppercase tracking-wider"
+                  >
+                    Active Intake Journal Logs
+                  </h3>
+                  <button
+                    onclick="clearDailyLogJournal()"
+                    class="text-[10px] font-bold text-red-400 hover:text-red-300 bg-red-950/20 px-2.5 py-1 rounded border border-red-900/30 transition duration-150 cursor-pointer"
+                  >
+                    Clear Session
+                  </button>
                 </div>
+                <div
+                  id="calorieJournalContainer"
+                  class="space-y-2 max-h-[220px] overflow-y-auto custom-scrollbar"
+                ></div>
+              </div>
             </div>
-
-            <div id="mealsView" class="view-panel hidden space-y-6">
-                <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 shadow-xl">
-                    <h2 class="text-base font-black text-white uppercase tracking-tight">AI Nutrition Structural Blueprint</h2>
-                    <p class="text-xs text-gray-400 mt-0.5">Dietary distribution frameworks scaled straight to your dry body mass variables.</p>
-                </div>
-
-                <div id="mealsPlaceholder" class="bg-gray-900 border border-gray-800 rounded-2xl p-12 text-center text-gray-500 text-xs shadow-xl">
-                    🥗 Run a biometrics inference sequence to synthesize micro-nutrient schedules.
-                </div>
-
-                <div id="mealsMainWorkspace" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4" id="mealsRoutineContainer"></div>
-                    <div class="bg-gray-900 border border-gray-800 rounded-2xl p-4 shadow-xl h-fit sticky top-24">
-                        <span class="text-[10px] font-black uppercase text-amber-500 tracking-widest font-mono block mb-1">Diet Presentation Hub</span>
-                        <h4 id="foodGuideTitle" class="text-sm font-bold text-white mb-2">Select a menu card item</h4>
-                        <p id="foodGuideDetails" class="text-xs text-gray-400 mb-4 leading-relaxed font-medium">Macro parameters will render structural visuals here.</p>
-                        <img id="foodGuideImage" src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=600&auto=format&fit=crop" class="w-full h-40 object-cover rounded-xl opacity-40 transition-all duration-300 border border-gray-800">
-                        <div class="mt-4 text-[10px] bg-amber-500/5 text-amber-400 border border-amber-500/10 px-3 py-2 rounded-xl text-center font-semibold uppercase tracking-wider" id="dietStrategyLabel">
-                            Processing Macro Strategies...
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="nutritionView" class="view-panel hidden space-y-6">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    
-                    <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 lg:p-6 shadow-xl flex flex-col justify-between">
-                        <div>
-                            <h2 class="text-lg font-black text-white uppercase tracking-tight">Desi Macro Registry</h2>
-                            <p class="text-xs text-gray-400 mt-1 mb-5">Proxy linear logging configurations for traditional Indian ingredients.</p>
-                            
-                            <form id="calorieCalculatorForm" class="space-y-4">
-                                <div>
-                                    <label class="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5">Select Ingredient</label>
-                                    <select id="foodKey" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-sm font-semibold focus:border-blue-500 focus:outline-none text-white">
-                                        <option value="paneer">Paneer (Raw Dairy Cubes) 🥛</option>
-                                        <option value="rice">Basmati Rice (Boiled Core) 🍚</option>
-                                        <option value="roti">Whole Wheat Roti (Per Piece) 🫓</option>
-                                        <option value="egg">Whole Poultry Egg (Boiled) 🥚</option>
-                                        <option value="soybean">Soybean Chunks (High Protein Raw) 🧆</option>
-                                        <option value="oats">Rolled Oats Baseline 🥣</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5">Quantity / Scale Logged</label>
-                                    <input type="number" id="quantityAmount" placeholder="e.g. 150g or 3 pieces" required class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-sm font-mono focus:border-blue-500 focus:outline-none text-white">
-                                    <p class="text-[10px] text-gray-500 mt-1 font-medium">Use grams for raw ingredients, or item counts for eggs and rotis.</p>
-                                </div>
-                                <button type="submit" id="calcBtn" class="w-full mt-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white font-bold py-3 rounded-xl transition duration-150 shadow-md shadow-orange-500/10 cursor-pointer">
-                                    Log to Daily Summary
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-
-                    <div class="lg:col-span-2 space-y-6">
-                        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 lg:p-6 shadow-xl space-y-4">
-                            <h3 class="text-sm font-black text-white uppercase tracking-wider border-b border-gray-800 pb-3">Incremental Transaction Metrics</h3>
-                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-                                <div class="bg-gray-950 p-3 rounded-xl border border-gray-850"><span class="block text-[10px] font-black text-gray-500 uppercase">Item Evaluated</span><span id="loggedFoodName" class="text-xs font-bold text-white block mt-1">-</span></div>
-                                <div class="bg-gray-950 p-3 rounded-xl border border-gray-850"><span class="block text-[10px] font-black text-gray-500 uppercase">Weight Tracked</span><span id="loggedServingSize" class="text-xs font-mono font-bold text-white block mt-1">-</span></div>
-                                <div class="bg-gray-950 p-3 rounded-xl border border-gray-850"><span class="block text-[10px] font-black text-gray-500 uppercase">Net Calories</span><span class="text-xs font-mono font-black text-amber-400 block mt-1"><span id="calcCal">0</span> kcal</span></div>
-                                <div class="bg-gray-950 p-3 rounded-xl border border-gray-850"><span class="block text-[10px] font-black text-gray-500 uppercase">Macro Vector</span><span class="text-[10px] font-mono text-gray-400 block mt-1">P:<span id="calcProt" class="text-white">0</span>g|C:<span id="calcCarb" class="text-white">0</span>g|F:<span id="calcFat" class="text-white">0</span>g</span></div>
-                            </div>
-                        </div>
-
-                        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-5 lg:p-6 shadow-xl space-y-4">
-                            <div class="flex justify-between items-center border-b border-gray-800 pb-3">
-                                <h3 class="text-sm font-black text-white uppercase tracking-wider">Active Intake Journal Logs</h3>
-                                <button onclick="clearDailyLogJournal()" class="text-[10px] font-bold text-red-400 hover:text-red-300 bg-red-950/20 px-2.5 py-1 rounded border border-red-900/30 transition duration-150 cursor-pointer">Clear Session</button>
-                            </div>
-                            <div id="calorieJournalContainer" class="space-y-2 max-h-[220px] overflow-y-auto custom-scrollbar"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </main>
+          </div>
+        </div>
+      </main>
     </div>
 
     <script src="js/app.js"></script>
-</body>
+  </body>
 </html>
