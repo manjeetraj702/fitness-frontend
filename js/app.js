@@ -1,7 +1,10 @@
-const API_BASE_URL = "https://fitness-backend-b8r0.onrender.com";
+const API_BASE_URL = "https://fitness-backend-1-r8wq.onrender.com";
 let macroChartInstance = null;
 const token = localStorage.getItem('jwtToken');
 
+// ============================================================
+// 1. SESSION PROTECTION GUARD
+// ============================================================
 const isLandingPage = window.location.pathname.endsWith('index.html') || window.location.pathname === '/';
 
 if (!isLandingPage) {
@@ -29,6 +32,9 @@ if (logoutBtn) {
     });
 }
 
+// ============================================================
+// 2. FITNESS BIOMETRICS PREDICTION SYSTEM
+// ============================================================
 const metricsForm = document.getElementById('metricsForm');
 if (metricsForm) {
     metricsForm.addEventListener('submit', async (e) => {
@@ -69,6 +75,7 @@ if (metricsForm) {
             document.getElementById('cOutput').textContent = `${pred.macros.carbs}g`;
             document.getElementById('fOutput').textContent = `${pred.macros.fats}g`;
 
+            // Unroll Workout Plan Split
             if (pred.workoutPlan) {
                 document.getElementById('workoutPlaceholder').classList.add('hidden');
                 document.getElementById('workoutMainWorkspace').classList.remove('hidden');
@@ -81,13 +88,14 @@ if (metricsForm) {
                 pred.workoutPlan.days.forEach(day => {
                     const routinesList = day.routines.map(r => `<li class="text-xs text-gray-400 font-mono mt-1">⚡ ${r}</li>`).join('');
                     routineContainer.innerHTML += `
-                        <div class="bg-gray-950 p-4 rounded-xl border border-gray-850">
+                        <div class="bg-gray-950 p-4 rounded-xl border border-gray-880">
                             <h4 class="text-xs font-black text-white uppercase tracking-wider">${day.name}</h4>
                             <ul class="mt-2 space-y-1">${routinesList}</ul>
                         </div>`;
                 });
             }
 
+            // Unroll Nutrition Blueprint List (🎯 FIXED: Clean Base64 Data Serialization)
             if (pred.mealPlan) {
                 document.getElementById('mealsPlaceholder').classList.add('hidden');
                 document.getElementById('mealsMainWorkspace').classList.remove('hidden');
@@ -97,9 +105,11 @@ if (metricsForm) {
                 mealsContainer.innerHTML = '';
                 
                 pred.mealPlan.days.forEach((meal, index) => {
-                    const escapedDetails = meal.details.replace(/"/g, '&quot;');
+                    // Safe encode string arrays using Base64 to bypass data character string breaks completely
+                    const safePayload = window.btoa(unescape(encodeURIComponent(JSON.stringify(meal))));
+                    
                     mealsContainer.innerHTML += `
-                        <div onclick="updateDietPresentationHub('${meal.time}', '${meal.dish}', '${escapedDetails}')" 
+                        <div onclick="unpackSafeDietHub('${safePayload}')" 
                              class="bg-gray-950 p-4 rounded-xl border border-gray-850 hover:border-amber-500/40 transition duration-150 cursor-pointer">
                             <span class="text-[10px] font-bold text-amber-500 uppercase tracking-widest block font-mono">${meal.time}</span>
                             <h4 class="text-sm font-black text-white mt-1">${meal.dish}</h4>
@@ -134,6 +144,16 @@ if (metricsForm) {
     });
 }
 
+// Unpack encoded base64 meal payloads on selection click safely
+window.unpackSafeDietHub = function(encodedString) {
+    try {
+        const decodedObj = JSON.parse(decodeURIComponent(escape(window.atob(encodedString))));
+        updateDietPresentationHub(decodedObj.time, decodedObj.dish, decodedObj.details);
+    } catch (e) {
+        console.error("Payload extraction fault.", e);
+    }
+};
+
 window.updateDietPresentationHub = function(time, dish, details) {
     const titleNode = document.getElementById('foodGuideTitle');
     const descNode = document.getElementById('foodGuideDetails');
@@ -145,6 +165,9 @@ window.updateDietPresentationHub = function(time, dish, details) {
     }
 };
 
+// ============================================================
+// 3. MANUAL CALORIE LOGGING SYSTEM
+// ============================================================
 const calorieCalculatorForm = document.getElementById('calorieCalculatorForm');
 if (calorieCalculatorForm) {
     calorieCalculatorForm.addEventListener("submit", async (e) => {
@@ -213,6 +236,9 @@ window.clearDailyLogJournal = function() {
     }
 };
 
+// ============================================================
+// 4. NAVIGATION VIEWPORT INTERCHANGER
+// ============================================================
 function bindNavigationTab(elementId, viewId) {
     const triggerBtn = document.getElementById(elementId);
     if (!triggerBtn) return;
